@@ -4,6 +4,8 @@ Report is written as an in-depth tutorial
 
 ## Converting YOLOv8 model
 
+In this step it is recommended to use you host 
+
 ### ONNX
 
 We will use already optimized ONNX model from **rknn_model_zoo**:
@@ -41,6 +43,8 @@ In this case, you need to install RKNN toolkit from https://github.com/rockchip-
 ```shell
 git clone https://github.com/rockchip-linux/rknn-toolkit2/
 cd rknn-toolkit2
+
+# Before executing change torch version from ==1.13.1 to >=1.3
 pip install -r rknn-toolkit2/packages/requirements_cp{your_python_version}-1.6.0.txt
 pip install rknn-toolkit2/packages/rknn_toolkit2-1.6.0+81f21f4d-cp{your_python_version}-cp{your_python_version}-linux_x86_64.whl
 ```
