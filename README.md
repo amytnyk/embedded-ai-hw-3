@@ -4,7 +4,7 @@ Report is written as an in-depth tutorial
 
 ## Converting YOLOv8 model
 
-In this step it is recommended to use you host 
+This was tested on **Ubuntu 22.04 (WSL)**
 
 ### ONNX
 
@@ -33,7 +33,6 @@ Convert ONNX to TFLite with int8 quantization:
 onnx2tf -i models/yolov8n.onnx -oiqt -o models/
 ```
 
-
 ### RKNN
 
 #### Toolkit installation
@@ -58,3 +57,7 @@ python3 onnx2rknn.py
 ```
 
 After this you should have `models/yolov8n.rknn` model
+
+## Running YOLOv8 model on OrangePi 5+
+
+### 
