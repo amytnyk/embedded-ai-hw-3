@@ -31,7 +31,10 @@ class DetectorBase(ABC):
         return image_data
 
     def _postprocess(self, output, image):
-        outputs = np.transpose(np.squeeze(output[0]))
+        outputs = np.squeeze(output[0])
+        print(outputs.shape)
+        outputs = np.expand_dims(outputs, axis=0)
+        outputs = np.transpose(outputs)
 
         rows = outputs.shape[0]
 
@@ -49,6 +52,8 @@ class DetectorBase(ABC):
 
             if max_score >= self._parameters.conf_threshold:
                 class_id = np.argmax(classes_scores)
+
+                # print(outputs[i])
 
                 x, y, w, h = outputs[i][0], outputs[i][1], outputs[i][2], outputs[i][3]
 
