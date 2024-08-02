@@ -8,14 +8,7 @@ This was tested on **Ubuntu 22.04 (WSL)**
 
 ### ONNX
 
-We will use already optimized ONNX model from **rknn_model_zoo**:
-```shell
-mkdir models
-cd models
-wget https://ftrg.zbox.filez.com/v2/delivery/data/95f00b0fc900458ba134f8b180b3f7a1/examples/yolov8/yolov8n.onnx
-```
-
-Also, you can use **Ultralytics** to export yolov8n as int8 onnx model:
+Use **Ultralytics** to export yolov8n as int8 onnx model:
 ```shell
 pip install ultralytics
 yolo export model=models/yolov8n.pt format=onnx int8=True
@@ -60,4 +53,14 @@ After this you should have `models/yolov8n.rknn` model
 
 ## Running YOLOv8 model on OrangePi 5+
 
-### 
+### Start YOLOv8 inference
+
+#### ONNX
+```shell
+python3 yolov8_inference.py --model-path models/yolov8n.onnx --engine onnx --input-video-path {path_to_video} --host-ip {host_ip} --host-port 5000
+```
+
+### View stream on host
+```shell
+gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,payload=96 ! rtph264depay ! avdec_h264 ! videoconvert ! autovideosink
+```

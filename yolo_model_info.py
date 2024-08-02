@@ -26,4 +26,4 @@ class YOLOModelInfo:
                                  'book',
                                  'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush'])
     image_width: int = 640
-    image_height: int = 480
+    image_height: int = 640
