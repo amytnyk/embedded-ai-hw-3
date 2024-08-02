@@ -53,7 +53,7 @@ pip install -r rknn-toolkit2/packages/requirements_cp{your_python_version}-1.6.0
 pip install rknn-toolkit2/packages/rknn_toolkit2-1.6.0+81f21f4d-cp{your_python_version}-cp{your_python_version}-linux_x86_64.whl
 ```
 
-Note: rknn-toolkit is only available on x86_64
+**Note**: rknn-toolkit is only available on x86_64
 
 #### Converting ONNX to RKNN
 
