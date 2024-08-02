@@ -10,13 +10,13 @@ from detector_parameters import DetectorParameters
 
 class RknnDetector(DetectorBase):
     def __init__(self, parameters: Optional[DetectorParameters] = None):
-        super().__init__(parameters)
+        super().__init__(parameters, False)
         self._rknn_lite: RKNNLite = RKNNLite(verbose=False)
         self._rknn_lite.load_rknn(self._parameters.model_path)
         self._rknn_lite.init_runtime()
 
     def _process(self, image_data):
-        outputs = self._rknn_lite.inference(inputs=[image_data])
+        outputs = self._rknn_lite.inference(inputs=[np.expand_dims(image_data, axis=0)])
         outputs[0] = np.squeeze(outputs[0])
         outputs[0] = np.expand_dims(outputs[0], axis=0)
         return outputs
