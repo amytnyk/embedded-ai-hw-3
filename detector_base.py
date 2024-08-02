@@ -1,3 +1,5 @@
+# Note: partially taken from https://github.com/airockchip/rknn_model_zoo/blob/main/examples/yolov8/python/yolov8.py
+
 from abc import ABC, abstractmethod
 from typing import List
 
