@@ -79,6 +79,12 @@ python3 yolov8_inference.py --model-path models/yolov8n.onnx --engine onnx --inp
 python3 yolov8_inference.py --model-path models/yolov8n.rknn --engine rknn --input-video-path {path_to_video} --host-ip {host_ip} --host-port 5000
 ```
 
+#### TFLite
+
+```shell
+python3 yolov8_inference.py --model-path models/yolov8n_float16.tflite --engine tflite --input-video-path {path_to_video} --host-ip {host_ip} --host-port 5000
+```
+
 ### View stream on host
 
 ```shell
@@ -87,6 +93,7 @@ gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,payload=96 ! rtph264depay ! 
 
 ## Results
 
+* **TFLite**: 2 FPS (average inference time 475ms)
 * **ONNX**: 3.5 FPS (average inference time 280ms)
 * **RKNN**: 25 FPS (average inference time 40ms)
 
