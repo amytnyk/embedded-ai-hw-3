@@ -8,21 +8,23 @@ import cv2
 import numpy as np
 
 from detection_result import DetectionResult
-from detector_base import DetectorBase
-from detector_parameters import DetectorParameters
-from onnx_detector import OnnxDetector
-from rknn_detector import RknnDetector
+from engine_parameters import EngineParameters
+from engine_base import EngineBase
+from onnx_engine import OnnxEngine
+from rknn_engine import RknnEngine
+from tflite_engine import TFLiteEngine
 
 
-class DetectorType(Enum):
+class EngineType(Enum):
     ONNX = auto()
     RKNN = auto()
+    TFLITE = auto()
 
 
 @dataclass
 class YOLOv8InferenceParameters:
-    detector_type: DetectorType
-    detector_parameters: DetectorParameters
+    engine_type: EngineType
+    engine_parameters: EngineParameters
     input_video_path: str
     host_ip: str
     host_port: int
@@ -42,21 +44,23 @@ class YOLOv8Inference:
             cv2.CAP_GSTREAMER, 0, 30,
             tuple(self._get_next_frame().shape[:2][::-1]), True)
         self._color_palette = np.random.uniform(0, 255,
-                                                size=(len(self._parameters.detector_parameters.model_info.classes), 3))
+                                                size=(len(self._parameters.engine_parameters.model_info.classes), 3))
 
-        self._detector: DetectorBase = self._get_detector_by_type(self._parameters.detector_type)(
-            self._parameters.detector_parameters)
+        self._detector: EngineBase = self._get_engine_by_type(self._parameters.engine_type)(
+            self._parameters.engine_parameters)
 
     def run(self):
         while True:
             self._update()
 
     @staticmethod
-    def _get_detector_by_type(detector_type: DetectorType) -> Type[DetectorBase]:
-        if detector_type == DetectorType.ONNX:
-            return OnnxDetector
-        elif detector_type == DetectorType.RKNN:
-            return RknnDetector
+    def _get_engine_by_type(engine_type: EngineType) -> Type[EngineBase]:
+        if engine_type == EngineType.ONNX:
+            return OnnxEngine
+        elif engine_type == EngineType.RKNN:
+            return RknnEngine
+        elif engine_type == EngineType.TFLITE:
+            return TFLiteEngine
 
     def _get_next_frame(self):
         ret, frame = self._video_capture.read()
@@ -74,7 +78,7 @@ class YOLOv8Inference:
 
             cv2.rectangle(image, (int(x1), int(y1)), (int(x1 + w), int(y1 + h)), color, 2)
 
-            label = (f"{self._parameters.detector_parameters.model_info.classes[detection.class_id]}: "
+            label = (f"{self._parameters.engine_parameters.model_info.classes[detection.class_id]}: "
                      f"{detection.score:.2f}")
 
             (label_width, label_height), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
@@ -105,7 +109,7 @@ def main():
     parser = ArgumentParser(
         prog='YOLOv8 Inference',
         description='Run yolov8 model')
-    parser.add_argument('--engine', type=str, choices=["rknn", "onnx"], required=True)
+    parser.add_argument('--engine', type=str, choices=["rknn", "onnx", "tflite"], required=True)
     parser.add_argument('--model-path', type=str, required=True)
     parser.add_argument('--input-video-path', type=str, required=True)
     parser.add_argument('--host-ip', type=str, required=True)
@@ -114,8 +118,8 @@ def main():
     args = parser.parse_args()
 
     inference = YOLOv8Inference(YOLOv8InferenceParameters(
-        detector_type=DetectorType.RKNN if args.engine == "rknn" else DetectorType.ONNX,
-        detector_parameters=DetectorParameters(args.model_path),
+        engine_type={"rknn": EngineType.RKNN, "onnx": EngineType.ONNX, "tflite": EngineType.TFLITE}[args.engine],
+        engine_parameters=EngineParameters(args.model_path),
         input_video_path=args.input_video_path,
         host_ip=args.host_ip,
         host_port=args.host_port

@@ -28,13 +28,13 @@ yolo export model=models/yolov8n.pt format=onnx int8=True
 Install latest tensorflow, tf-keras and onnx2tf:
 
 ```shell
-pip install tensorflow tf-keras onnx2tf
+pip install tensorflow==2.14.0 tf-keras==2.16.0 onnx2tf==1.19.1
 ```
 
 Convert ONNX to TFLite with int8 quantization:
 
 ```shell
-onnx2tf -i models/yolov8n.onnx -oiqt -o models/
+onnx2tf -i models/yolov8n.onnx -oiqt -onimc 318 onnx::ReduceSum_326 331 338 onnx::ReduceSum_346 350 357 onnx::ReduceSum_365 369 -o models/
 ```
 
 ### RKNN
