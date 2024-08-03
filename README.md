@@ -97,4 +97,4 @@ gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,payload=96 ! rtph264depay ! 
 * **ONNX**: 3.5 FPS (average inference time 280ms)
 * **RKNN**: 25 FPS (average inference time 40ms)
 
-The main reason why ONNX is much slower is that ONNX is running on CPU while RKNN utilizes Rockchip NPU
+The main reason why RKNN is much faster is that it runs on a Rockchip NPU while both onnx and tflite run on CPU
