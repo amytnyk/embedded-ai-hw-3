@@ -13,6 +13,4 @@ class OnnxEngine(EngineBase):
         self._output_list = [self._sess.get_outputs()[i].name for i in range(len(self._sess.get_outputs()))]
 
     def _process(self, image_data):
-        outputs = self._sess.run(self._output_list, {self._sess.get_inputs()[0].name: image_data})
-        print(len(outputs), [outputs[i].shape for i in range(len(outputs))])
-        return outputs
+        return self._sess.run(self._output_list, {self._sess.get_inputs()[0].name: image_data})

@@ -17,13 +17,10 @@ class TFLiteEngine(EngineBase):
         print(self._input_details, self._output_details)
 
     def _process(self, image_data):
-        print(image_data.shape)
         self._interpreter.set_tensor(self._input_details[0]['index'], np.transpose(image_data, (0, 2, 3, 1)))
         self._interpreter.invoke()
 
-        output = [
+        return [
             np.transpose(np.expand_dims(self._interpreter.get_tensor(self._output_details[i]['index'])[0], axis=0),
                          (0, 3, 1, 2)) for i in
             range(len(self._output_details))]
-        print(len(output), [output[i].shape for i in range(len(output))])
-        return output

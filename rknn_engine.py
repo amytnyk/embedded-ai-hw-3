@@ -20,7 +20,7 @@ class RknnEngine(EngineBase):
         outputs = self._rknn_lite.inference(inputs=[np.expand_dims(image_data, axis=0)])
         outputs[0] = np.squeeze(outputs[0])
         outputs[0] = np.expand_dims(outputs[0], axis=0)
-        print(len(outputs), outputs[0].shape)
+
         return outputs
 
     def __del__(self):
